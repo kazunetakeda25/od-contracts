@@ -36,7 +36,7 @@ jobs:
         run: yarn add typechain @typechain/web3-v1 @typechain/ethers-v6
 
       - name: Run Interface Exporter Action
-        uses: open-dollar/interface-exporter-action@v1.0.0
+        uses: open-dollar/solidity-exporter-action@v1.0.0
         with:
           out_dir: "out"
           typing_type: "ethers-v6"
