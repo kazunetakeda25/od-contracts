@@ -86,16 +86,17 @@ contract GenerateModifyParametersProposal is Generator, JSONScript {
     string memory dataString
   ) internal pure returns (bytes memory dataOutput) {
     bytes32 typeHash = keccak256(abi.encode(dataType));
+    bytes32 encodedParam = bytes32((abi.encodePacked(param)));
     bytes4 selector = IModifiable.modifyParameters.selector;
 
     if (typeHash == keccak256(abi.encode('uint256')) || typeHash == keccak256(abi.encode('uint'))) {
-      dataOutput = abi.encodeWithSelector(selector, abi.encodePacked(param), vm.parseUint(dataString));
+      dataOutput = abi.encodeWithSelector(selector, encodedParam, abi.encode(vm.parseUint(dataString)));
     } else if (typeHash == keccak256(abi.encode('address'))) {
-      dataOutput = abi.encodeWithSelector(selector, abi.encodePacked(param), vm.parseAddress(dataString));
+      dataOutput = abi.encodeWithSelector(selector, encodedParam, abi.encode(vm.parseAddress(dataString)));
     } else if (typeHash == keccak256(abi.encode('string'))) {
-      dataOutput = abi.encodeWithSelector(selector, abi.encodePacked(param), dataString);
+      dataOutput = abi.encodeWithSelector(selector, encodedParam, abi.encode(dataString));
     } else if (typeHash == keccak256(abi.encode('int256')) || typeHash == keccak256(abi.encode('int'))) {
-      dataOutput = abi.encodeWithSelector(selector, abi.encodePacked(param), vm.parseInt(dataString));
+      dataOutput = abi.encodeWithSelector(selector, encodedParam, abi.encode(vm.parseInt(dataString)));
     } else {
       revert UnrecognizedDataType();
     }
